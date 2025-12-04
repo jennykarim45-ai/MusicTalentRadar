@@ -47,15 +47,4 @@ jobs:
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
       run: |
         cd scripts
-        python -c "
-from auto_scheduler import detect_growth_alerts
-detect_growth_alerts()
-        "
-    
-    - name: Upload logs
-      if: always()
-      uses: actions/upload-artifact@v3
-      with:
-        name: collection-logs
-        path: logs/*.log
-
+        python detect_alerts.py
