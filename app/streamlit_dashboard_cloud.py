@@ -27,9 +27,9 @@ st.set_page_config(
 COLORS = {
     'primary': '#FF1B8D',
     'secondary': "#323A79",
-    'accent1': '#FFD700',
+    'accent1': "#C3100D",
     'accent2': "#4A0B7E",
-    'accent3': "#D23934",
+    'accent3': "#20C381",
     'bg_dark': "#070707",
     'bg_card': "#000000",
     'text': "#E88F00"
