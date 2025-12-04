@@ -20,6 +20,7 @@ except:
 
 st.set_page_config(
     page_title="JEK2 Records - Talent Radar",
+    page_icon="🎤",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -27,9 +28,9 @@ st.set_page_config(
 COLORS = {
     'primary': '#FF1B8D',
     'secondary': "#323A79",
-    'accent1': "#C3100D",
+    'accent1': '#FFD700',
     'accent2': "#4A0B7E",
-    'accent3': "#20C381",
+    'accent3': "#D23934",
     'bg_dark': "#070707",
     'bg_card': "#000000",
     'text': "#E88F00"
@@ -227,14 +228,14 @@ try:
     
     # Vérifications robustes
     if artistes_df.empty or metriques_df.empty:
-        st.error(" Base de données vide ou inaccessible")
-        st.info(" Importez vos données avec le script `database_postgres.py`")
+        st.error("❌ Base de données vide ou inaccessible")
+        st.info("💡 Importez vos données avec le script `database_postgres.py`")
         st.stop()
     
     latest_metrics_df = get_latest_metrics(metriques_df)
     
     if latest_metrics_df.empty:
-        st.error(" Aucune métrique trouvée")
+        st.error("❌ Aucune métrique trouvée")
         st.stop()
     
     # Conversion scores en numérique
@@ -242,7 +243,7 @@ try:
     metriques_df['score_potentiel'] = pd.to_numeric(metriques_df['score_potentiel'], errors='coerce')
     
 except Exception as e:
-    st.error(f" Erreur critique: {e}")
+    st.error(f"❌ Erreur critique: {e}")
     st.stop()
 
 # ==================== HEADER ====================
@@ -383,50 +384,102 @@ with tab3:
                 artist_data = metriques_df[metriques_df['nom_artiste'] == selected_artist].copy()
                 
                 if not artist_data.empty:
+                    # Préparation des données
                     artist_data['date_collecte'] = pd.to_datetime(artist_data['date_collecte'])
                     artist_data = artist_data.sort_values('date_collecte')
                     
-                    latest = artist_data.iloc[-1]
-                    followers = latest['followers'] if pd.notna(latest.get('followers')) else latest.get('fans', 0)
+                    # Calcul followers (Spotify ou Deezer)
+                    artist_data['followers_chart'] = artist_data.apply(
+                        lambda row: row['followers'] if pd.notna(row.get('followers')) else row.get('fans', 0), axis=1
+                    )
                     
+                    latest = artist_data.iloc[-1]
+                    followers = latest['followers_chart']
+                    
+                    # Métriques en haut
                     col1, col2, col3 = st.columns(3)
                     with col1:
-                        st.metric("👥 Followers", f"{int(followers):,}")
+                        st.metric("👥 Followers/Fans", f"{int(followers):,}")
                     with col2:
-                        st.metric("⭐ Score", f"{latest['score_potentiel']:.1f}")
+                        st.metric("⭐ Score Actuel", f"{latest['score_potentiel']:.1f}")
                     with col3:
                         if len(artist_data) > 1:
-                            first_f = artist_data.iloc[0]['followers'] if pd.notna(artist_data.iloc[0].get('followers')) else artist_data.iloc[0].get('fans', 0)
+                            first_f = artist_data.iloc[0]['followers_chart']
                             if first_f > 0:
                                 growth = ((followers - first_f) / first_f) * 100
                                 st.metric("📈 Croissance", f"{growth:.1f}%")
                     
+                    st.markdown("---")
+                    
+                    # Graphiques (2 colonnes)
                     if len(artist_data) > 1:
                         col1, col2 = st.columns(2)
+                        
                         with col1:
-                            artist_data['followers_chart'] = artist_data.apply(
-                                lambda row: row['followers'] if pd.notna(row.get('followers')) else row.get('fans', 0), axis=1)
+                            st.markdown("#### 👥 Évolution des Followers/Fans")
                             chart_data = artist_data[artist_data['followers_chart'] > 0]
                             if len(chart_data) > 0:
-                                fig = px.line(chart_data, x='date_collecte', y='followers_chart', 
-                                             title='Followers/Fans', markers=True)
-                                fig.update_traces(line_color=COLORS['accent3'], line_width=3, marker=dict(size=8))
-                                fig.update_layout(plot_bgcolor=COLORS['bg_card'], paper_bgcolor=COLORS['bg_card'], font_color=COLORS['text'])
+                                fig = px.line(
+                                    chart_data, 
+                                    x='date_collecte', 
+                                    y='followers_chart',
+                                    markers=True,
+                                    labels={'date_collecte': 'Date', 'followers_chart': 'Followers/Fans'}
+                                )
+                                fig.update_traces(
+                                    line_color=COLORS['accent3'], 
+                                    line_width=3, 
+                                    marker=dict(size=10, color=COLORS['primary'])
+                                )
+                                fig.update_layout(
+                                    plot_bgcolor=COLORS['bg_card'], 
+                                    paper_bgcolor=COLORS['bg_card'], 
+                                    font_color=COLORS['text'],
+                                    xaxis_title="Date",
+                                    yaxis_title="Followers/Fans",
+                                    height=400
+                                )
                                 st.plotly_chart(fig, use_container_width=True)
+                            else:
+                                st.info("Pas de données de followers")
+                        
                         with col2:
-                            fig = px.line(artist_data, x='date_collecte', y='score_potentiel', 
-                                         title='Score', markers=True)
-                            fig.update_traces(line_color=COLORS['secondary'], line_width=3, marker=dict(size=8))
-                            fig.update_layout(plot_bgcolor=COLORS['bg_card'], paper_bgcolor=COLORS['bg_card'], font_color=COLORS['text'])
+                            st.markdown("#### ⭐ Évolution du Score")
+                            fig = px.line(
+                                artist_data, 
+                                x='date_collecte', 
+                                y='score_potentiel',
+                                markers=True,
+                                labels={'date_collecte': 'Date', 'score_potentiel': 'Score'}
+                            )
+                            fig.update_traces(
+                                line_color=COLORS['secondary'], 
+                                line_width=3, 
+                                marker=dict(size=10, color=COLORS['accent1'])
+                            )
+                            fig.update_layout(
+                                plot_bgcolor=COLORS['bg_card'], 
+                                paper_bgcolor=COLORS['bg_card'], 
+                                font_color=COLORS['text'],
+                                xaxis_title="Date",
+                                yaxis_title="Score de Potentiel",
+                                height=400
+                            )
                             st.plotly_chart(fig, use_container_width=True)
+                    else:
+                        st.info("Pas assez de données historiques (minimum 2 collectes nécessaires)")
+                else:
+                    st.warning("Aucune donnée pour cet artiste")
+        else:
+            st.warning("Aucun artiste trouvé dans la base")
     else:
-        st.info("Pas de données d'évolution")
+        st.info("Pas de données d'évolution disponibles")
 
 # ==================== TAB 4: ALERTES ====================
 with tab4:
     st.markdown("### 🔔 Alertes")
     if len(alertes_df) == 0:
-        st.info(" Aucune alerte pour le moment")
+        st.info("✅ Aucune alerte pour le moment")
     else:
         for _, alert in alertes_df.iterrows():
             st.markdown(f"""
@@ -651,14 +704,14 @@ with tab5:
     
     st.markdown(f"""
     <div class="info-box">
-    <h3 style="color: {COLORS['accent3']};"> EN RÉSUMÉ</h3>
+    <h3 style="color: {COLORS['accent3']};">💡 EN RÉSUMÉ</h3>
     <p style="font-size: 1.1rem; line-height: 1.8;">
     Notre algorithme cherche le <strong>"sweet spot"</strong> : des artistes qui ont déjà prouvé 
     leur talent (communauté engagée, morceaux de qualité, régularité), mais qui sont encore 
     <strong>sous le radar du grand public</strong>. C'est là qu'on peut les aider à exploser ! 🚀
     </p>
     <p style="font-size: 1.05rem; line-height: 1.8;">
-    <strong>Important :</strong> Un score élevé ne garantit pas le succès, mais il identifie 
+    ⚠️ <strong>Important :</strong> Un score élevé ne garantit pas le succès, mais il identifie 
     les artistes qui ont toutes les cartes en main pour y arriver.
     </p>
     </div>
