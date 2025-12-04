@@ -38,7 +38,12 @@ def init_database():
         )
     """)
     
-    # Table métriques historique
+    # Index sur artist_id pour performance
+    cursor.execute("""
+        CREATE INDEX IF NOT EXISTS idx_artist_id ON artistes(artist_id)
+    """)
+    
+    # Table métriques historique (SANS foreign key)
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS metriques_historique (
             id SERIAL PRIMARY KEY,
@@ -50,14 +55,13 @@ def init_database():
             popularite INTEGER,
             score_potentiel DECIMAL(5,2),
             engagement_rate DECIMAL(5,2),
-            total_albums INTEGER,
-            FOREIGN KEY (artist_id) REFERENCES artistes(artist_id)
+            total_albums INTEGER
         )
     """)
     
     # Index pour performance
     cursor.execute("""
-        CREATE INDEX IF NOT EXISTS idx_artist_platform 
+        CREATE INDEX IF NOT EXISTS idx_metrics_artist_platform 
         ON metriques_historique(artist_id, plateforme)
     """)
     
@@ -77,6 +81,10 @@ def init_database():
             date_alerte TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             vu BOOLEAN DEFAULT FALSE
         )
+    """)
+    
+    cursor.execute("""
+        CREATE INDEX IF NOT EXISTS idx_alertes_artist ON alertes(artist_id)
     """)
     
     conn.commit()
