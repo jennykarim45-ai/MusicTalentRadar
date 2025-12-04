@@ -1,0 +1,61 @@
+name: Daily Music Data Collection
+
+on:
+  schedule:
+    # Tous les jours à 2h du matin UTC (3h en France hiver, 4h en été)
+    - cron: '0 2 * * *'
+  
+  # Permet de lancer manuellement depuis GitHub
+  workflow_dispatch:
+
+jobs:
+  collect-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install spotipy requests psycopg2-binary python-dotenv
+    
+    - name: Run Spotify scraper
+      env:
+        SPOTIPY_CLIENT_ID: ${{ secrets.SPOTIPY_CLIENT_ID }}
+        SPOTIPY_CLIENT_SECRET: ${{ secrets.SPOTIPY_CLIENT_SECRET }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      run: |
+        cd scripts
+        python spotify_scraper.py
+    
+    - name: Run Deezer scraper
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      run: |
+        cd scripts
+        python deezer_scraper.py
+    
+    - name: Detect growth alerts
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      run: |
+        cd scripts
+        python -c "
+from auto_scheduler import detect_growth_alerts
+detect_growth_alerts()
+        "
+    
+    - name: Upload logs
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: collection-logs
+        path: logs/*.log
+
