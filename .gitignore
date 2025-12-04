@@ -1,0 +1,36 @@
+# Environnement virtuel
+venv/
+
+# Base de données
+*.db
+*.sqlite
+
+# Fichiers CSV (données)
+*.csv
+
+# Logs
+*.log
+logs/
+
+# Clés API et configuration sensible
+config.py
+.env
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# VSCode
+.vscode/
+
+# Visualisations générées (optionnel, à voir si tu veux les commit)
+visualizations/*.png
+
+# OS
+.DS_Store
+Thumbs.db
