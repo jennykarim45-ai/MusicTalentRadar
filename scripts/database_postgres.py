@@ -98,15 +98,28 @@ def import_csv_to_postgres():
     import pandas as pd
     import glob
     from datetime import datetime
+    import os
+    
+    # Déterminer le bon chemin
+    if os.path.exists('../data'):
+        data_path = '../data'
+    elif os.path.exists('data'):
+        data_path = 'data'
+    else:
+        print("❌ Dossier 'data' introuvable")
+        return
     
     conn = get_connection()
     cursor = conn.cursor()
     
     # Import Spotify
-    spotify_files = glob.glob('data/spotify_emerging_artists_*.csv')
+    spotify_files = glob.glob(f'{data_path}/spotify_emerging_artists_*.csv')
+    print(f"Fichiers Spotify trouvés: {len(spotify_files)}")
+    
     for file in spotify_files:
         print(f"Import {file}...")
         df = pd.read_csv(file)
+        print(f"  → {len(df)} artistes dans le fichier")
         
         for _, row in df.iterrows():
             # Insert artiste
@@ -115,7 +128,7 @@ def import_csv_to_postgres():
                 VALUES (%s, %s, %s, %s, %s)
                 ON CONFLICT (artist_id, plateforme) DO NOTHING
             """, (
-                row.get('id', ''),
+                str(row.get('id', '')),
                 row['nom'],
                 'Spotify',
                 row.get('url_spotify', ''),
@@ -128,19 +141,24 @@ def import_csv_to_postgres():
                 (artist_id, plateforme, followers, popularite, score_potentiel, date_collecte)
                 VALUES (%s, %s, %s, %s, %s, %s)
             """, (
-                row.get('id', ''),
+                str(row.get('id', '')),
                 'Spotify',
-                row.get('followers', 0),
-                row.get('popularite', 0),
-                row.get('score_potentiel', 0),
+                int(row.get('followers', 0)) if pd.notna(row.get('followers')) else 0,
+                int(row.get('popularite', 0)) if pd.notna(row.get('popularite')) else 0,
+                float(row.get('score_potentiel', 0)) if pd.notna(row.get('score_potentiel')) else 0,
                 row.get('date_extraction', datetime.now())
             ))
+        
+        print(f"  ✅ Importé")
     
     # Import Deezer
-    deezer_files = glob.glob('data/deezer_emerging_artists_*.csv')
+    deezer_files = glob.glob(f'{data_path}/deezer_emerging_artists_*.csv')
+    print(f"Fichiers Deezer trouvés: {len(deezer_files)}")
+    
     for file in deezer_files:
         print(f"Import {file}...")
         df = pd.read_csv(file)
+        print(f"  → {len(df)} artistes dans le fichier")
         
         for _, row in df.iterrows():
             cursor.execute("""
@@ -163,18 +181,24 @@ def import_csv_to_postgres():
             """, (
                 str(row.get('artist_id', '')),
                 'Deezer',
-                row.get('fans', 0),
-                row.get('score_potentiel', 0),
-                row.get('engagement_rate', 0),
-                row.get('total_albums', 0),
+                int(row.get('fans', 0)) if pd.notna(row.get('fans')) else 0,
+                float(row.get('score_potentiel', 0)) if pd.notna(row.get('score_potentiel')) else 0,
+                float(row.get('engagement_rate', 0)) if pd.notna(row.get('engagement_rate')) else 0,
+                int(row.get('total_albums', 0)) if pd.notna(row.get('total_albums')) else 0,
                 row.get('date_extraction', datetime.now())
             ))
+        
+        print(f"  ✅ Importé")
     
     conn.commit()
     cursor.close()
     conn.close()
     
-    print("✅ Import terminé")
+    total_files = len(spotify_files) + len(deezer_files)
+    if total_files == 0:
+        print("⚠️ Aucun fichier CSV trouvé")
+    else:
+        print(f"\n✅ Import terminé ({total_files} fichiers)")
 
 if __name__ == "__main__":
     print("Initialisation de la base PostgreSQL...")
