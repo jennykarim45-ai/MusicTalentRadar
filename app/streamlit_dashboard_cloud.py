@@ -107,6 +107,12 @@ try:
     artistes_df, metriques_df, alertes_df = load_data()
     latest_metrics_df = get_latest_metrics()
     
+    # Vérifier si les données existent
+    if latest_metrics_df.empty:
+        st.error("❌ Aucune donnée trouvée dans la base de données")
+        st.info("La base est configurée mais vide. Importez vos données CSV avec `database_postgres.py`")
+        st.stop()
+    
     latest_metrics_df['score_potentiel'] = pd.to_numeric(latest_metrics_df['score_potentiel'], errors='coerce')
     metriques_df['score_potentiel'] = pd.to_numeric(metriques_df['score_potentiel'], errors='coerce')
     
