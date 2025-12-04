@@ -30,7 +30,7 @@ COLORS = {
     'secondary': "#323A79",
     'accent1': '#FFD700',
     'accent2': "#4A0B7E",
-    'accent3': "#D23934",
+    'accent3': "#21B178",
     'bg_dark': "#070707",
     'bg_card': "#000000",
     'text': "#E88F00"
@@ -228,14 +228,14 @@ try:
     
     # Vérifications robustes
     if artistes_df.empty or metriques_df.empty:
-        st.error("❌ Base de données vide ou inaccessible")
-        st.info("💡 Importez vos données avec le script `database_postgres.py`")
+        st.error(" Base de données vide ou inaccessible")
+        st.info(" Importez vos données avec le script `database_postgres.py`")
         st.stop()
     
     latest_metrics_df = get_latest_metrics(metriques_df)
     
     if latest_metrics_df.empty:
-        st.error("❌ Aucune métrique trouvée")
+        st.error(" Aucune métrique trouvée")
         st.stop()
     
     # Conversion scores en numérique
@@ -243,7 +243,7 @@ try:
     metriques_df['score_potentiel'] = pd.to_numeric(metriques_df['score_potentiel'], errors='coerce')
     
 except Exception as e:
-    st.error(f"❌ Erreur critique: {e}")
+    st.error(f" Erreur critique: {e}")
     st.stop()
 
 # ==================== HEADER ====================
@@ -271,9 +271,7 @@ with st.sidebar:
     min_score = st.slider("⭐ Score minimum", 0, 100, 0, 5)
     followers_range = st.slider("👥 Followers/Fans", 0, 100000, (0, 100000), 1000)
     
-    # Indicateur d'environnement
-    st.info("☁️ Mode Cloud (PostgreSQL)" if USE_POSTGRES else "💻 Mode Local (SQLite)")
-
+    
 # ==================== FILTRES ====================
 filtered_df = latest_metrics_df.copy()
 
