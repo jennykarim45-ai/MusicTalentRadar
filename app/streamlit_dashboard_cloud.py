@@ -33,7 +33,7 @@ COLORS = {
     'accent3': "#21B178",
     'bg_dark': "#070707",
     'bg_card': "#000000",
-    'text': "#E88F00"
+    'text': "#7F5107"
 }
 
 st.markdown(f"""
