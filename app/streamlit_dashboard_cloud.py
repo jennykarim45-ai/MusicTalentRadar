@@ -513,7 +513,7 @@ with tab5:
         <div class="info-box">
         <h4 style="color: {COLORS['accent3']};">NOS CRITÈRES</h4>
         <p><strong>👥 Communauté :</strong><br>
-        1 000 - 50 000 followers</p>
+        1 000 - 100 000 followers</p>
         <p><strong>🎵 Genres :</strong><br>
         Rap, Hip-Hop, Trap, Drill, RnB, Soul</p>
         <p><strong>📍 Localisation :</strong><br>
