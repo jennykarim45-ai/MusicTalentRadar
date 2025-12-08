@@ -387,20 +387,22 @@ with tab2:
         # Ajouter colonne "Écouter" (même URL que profil)
         display_df['Écouter'] = display_df['url']
         
+        # Supprimer la colonne url
+        display_df = display_df.drop(columns=['url'])
+        
         # Renommer les colonnes
-        display_df.columns = ['Nom', 'Plateforme', 'Followers/Fans', 'Score', 'url', '🎵 Écouter']
+        display_df.columns = ['Nom', 'Plateforme', 'Followers/Fans', 'Score', '🎵 Écouter']
         
         # Formater
         display_df['Followers/Fans'] = display_df['Followers/Fans'].apply(lambda x: f"{int(x):,}")
         display_df['Score'] = display_df['Score'].round(1)
         
-        # Afficher avec 2 liens cliquables
+        # Afficher avec lien cliquable
         st.dataframe(
             display_df, 
             use_container_width=True, 
             hide_index=True,
             column_config={
-                "Profil": st.column_config.LinkColumn("Profil", display_text="🔗 Voir"),
                 "🎵 Écouter": st.column_config.LinkColumn("Écouter", display_text="▶️ Play")
             }
         )
