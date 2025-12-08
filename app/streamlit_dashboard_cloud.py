@@ -713,10 +713,7 @@ with tab5:
         Autres = score proportionnel
         </div>
         
-        <h4 style="color: {COLORS['accent1']};">🎁 Bonus </h4>
-        <div class="score-formula">
-        ✅ BONUS +5 pts : Si 5 000-50 000 fans (zone pépite)<br>
-        
+                
         </div>
         </div>
         """, unsafe_allow_html=True)
