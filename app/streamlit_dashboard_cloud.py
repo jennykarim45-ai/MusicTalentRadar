@@ -361,10 +361,20 @@ with col1:
     else:
         st.info("Aucune donnée avec ces filtres")
 
+
+
+with col2:
+    st.markdown("### 👥 Répartition")
+    platform_counts = artistes_df['plateforme'].value_counts()
+    fig = go.Figure(data=[go.Pie(labels=platform_counts.index, values=platform_counts.values, hole=0.4,
+                                marker=dict(colors=[COLORS['accent3'], COLORS['secondary']]))])
+    fig.update_layout(plot_bgcolor=COLORS['bg_card'], paper_bgcolor=COLORS['bg_card'], font_color=COLORS['text'])
+    st.plotly_chart(fig, use_container_width=True)
+
 # Section Top 5 avec 2 colonnes
 st.markdown("---")
 col_top1, col_top2 = st.columns(2)    
-
+   
 with col_top1:
     st.markdown("### 🏆 Top 5 Deezer")
     if len(filtered_df) > 0:
