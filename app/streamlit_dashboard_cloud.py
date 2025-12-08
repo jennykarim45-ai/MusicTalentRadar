@@ -336,104 +336,104 @@ with tab1:
     st.markdown("---")
     col1, col2 = st.columns(2)
     
-with col1:
-    st.markdown("### 📊 Distribution des scores")
-    if len(filtered_df) > 0:
-        fig = px.histogram(
-            filtered_df, 
-            x='score_potentiel', 
-            nbins=20, 
-            color='plateforme',
-            color_discrete_map={'Spotify': COLORS['accent3'], 'Deezer': COLORS['secondary']},
-            labels={
-                'count': "Nombre d'artistes",      # ← Change "count" en "Nombre d'artistes"
-                'score_potentiel': 'Score'          # ← Change le nom de l'axe X
-            }
-        )
-        fig.update_layout(
-            plot_bgcolor=COLORS['bg_card'], 
-            paper_bgcolor=COLORS['bg_card'], 
-            font_color=COLORS['text'],
-            yaxis_title="Nombre d'artistes",        # ← Titre de l'axe Y
-            xaxis_title="Score de Potentiel"        # ← Titre de l'axe X
-        )
+    with col1:
+        st.markdown("### 📊 Distribution des scores")
+        if len(filtered_df) > 0:
+            fig = px.histogram(
+                filtered_df, 
+                x='score_potentiel', 
+                nbins=20, 
+                color='plateforme',
+                color_discrete_map={'Spotify': COLORS['accent3'], 'Deezer': COLORS['secondary']},
+                labels={
+                    'count': "Nombre d'artistes",      # ← Change "count" en "Nombre d'artistes"
+                    'score_potentiel': 'Score'          # ← Change le nom de l'axe X
+                }
+            )
+            fig.update_layout(
+                plot_bgcolor=COLORS['bg_card'], 
+                paper_bgcolor=COLORS['bg_card'], 
+                font_color=COLORS['text'],
+                yaxis_title="Nombre d'artistes",        # ← Titre de l'axe Y
+                xaxis_title="Score de Potentiel"        # ← Titre de l'axe X
+            )
+            st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.info("Aucune donnée avec ces filtres")
+
+
+
+    with col2:
+        st.markdown("### 👥 Répartition")
+        platform_counts = artistes_df['plateforme'].value_counts()
+        fig = go.Figure(data=[go.Pie(labels=platform_counts.index, values=platform_counts.values, hole=0.4,
+                                    marker=dict(colors=[COLORS['accent3'], COLORS['secondary']]))])
+        fig.update_layout(plot_bgcolor=COLORS['bg_card'], paper_bgcolor=COLORS['bg_card'], font_color=COLORS['text'])
         st.plotly_chart(fig, use_container_width=True)
-    else:
-        st.info("Aucune donnée avec ces filtres")
 
-
-
-with col2:
-    st.markdown("### 👥 Répartition")
-    platform_counts = artistes_df['plateforme'].value_counts()
-    fig = go.Figure(data=[go.Pie(labels=platform_counts.index, values=platform_counts.values, hole=0.4,
-                                marker=dict(colors=[COLORS['accent3'], COLORS['secondary']]))])
-    fig.update_layout(plot_bgcolor=COLORS['bg_card'], paper_bgcolor=COLORS['bg_card'], font_color=COLORS['text'])
-    st.plotly_chart(fig, use_container_width=True)
-
-# Section Top 5 avec 2 colonnes
-st.markdown("---")
-col_top1, col_top2 = st.columns(2)    
-   
-with col_top1:
-    st.markdown("### 🏆 Top 5 Deezer")
-    if len(filtered_df) > 0:
-        # Filtrer uniquement Deezer
-        deezer_df = filtered_df[filtered_df['plateforme'] == 'Deezer']
-        if len(deezer_df) > 0:
-            top5_deezer = deezer_df.nlargest(min(5, len(deezer_df)), 'score_potentiel')
-            fig = px.bar(
-                top5_deezer, 
-                x='score_potentiel', 
-                y='nom_artiste', 
-                orientation='h', 
-                text='score_potentiel',
-                color_discrete_sequence=[COLORS['secondary']]
-            )
-            fig.update_traces(texttemplate='%{text:.1f}', textposition='outside')
-            fig.update_layout(
-                plot_bgcolor=COLORS['bg_card'], 
-                paper_bgcolor=COLORS['bg_card'], 
-                font_color=COLORS['text'], 
-                yaxis={'categoryorder':'total ascending'}, 
-                height=400,
-                showlegend=False
-            )
-            st.plotly_chart(fig, use_container_width=True)
+    # Section Top 5 avec 2 colonnes
+    st.markdown("---")
+    col_top1, col_top2 = st.columns(2)    
+    
+    with col_top1:
+        st.markdown("### 🏆 Top 5 Deezer")
+        if len(filtered_df) > 0:
+            # Filtrer uniquement Deezer
+            deezer_df = filtered_df[filtered_df['plateforme'] == 'Deezer']
+            if len(deezer_df) > 0:
+                top5_deezer = deezer_df.nlargest(min(5, len(deezer_df)), 'score_potentiel')
+                fig = px.bar(
+                    top5_deezer, 
+                    x='score_potentiel', 
+                    y='nom_artiste', 
+                    orientation='h', 
+                    text='score_potentiel',
+                    color_discrete_sequence=[COLORS['secondary']]
+                )
+                fig.update_traces(texttemplate='%{text:.1f}', textposition='outside')
+                fig.update_layout(
+                    plot_bgcolor=COLORS['bg_card'], 
+                    paper_bgcolor=COLORS['bg_card'], 
+                    font_color=COLORS['text'], 
+                    yaxis={'categoryorder':'total ascending'}, 
+                    height=400,
+                    showlegend=False
+                )
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.info("Aucun artiste Deezer avec ces filtres")
         else:
-            st.info("Aucun artiste Deezer avec ces filtres")
-    else:
-        st.info("Aucune donnée avec ces filtres")
+            st.info("Aucune donnée avec ces filtres")
 
-with col_top2:
-    st.markdown("### 🏆 Top 5 Spotify")
-    if len(filtered_df) > 0:
-        # Filtrer uniquement Spotify
-        spotify_df = filtered_df[filtered_df['plateforme'] == 'Spotify']
-        if len(spotify_df) > 0:
-            top5_spotify = spotify_df.nlargest(min(5, len(spotify_df)), 'score_potentiel')
-            fig = px.bar(
-                top5_spotify, 
-                x='score_potentiel', 
-                y='nom_artiste', 
-                orientation='h', 
-                text='score_potentiel',
-                color_discrete_sequence=[COLORS['accent3']]
-            )
-            fig.update_traces(texttemplate='%{text:.1f}', textposition='outside')
-            fig.update_layout(
-                plot_bgcolor=COLORS['bg_card'], 
-                paper_bgcolor=COLORS['bg_card'], 
-                font_color=COLORS['text'], 
-                yaxis={'categoryorder':'total ascending'}, 
-                height=400,
-                showlegend=False
-            )
-            st.plotly_chart(fig, use_container_width=True)
+    with col_top2:
+        st.markdown("### 🏆 Top 5 Spotify")
+        if len(filtered_df) > 0:
+            # Filtrer uniquement Spotify
+            spotify_df = filtered_df[filtered_df['plateforme'] == 'Spotify']
+            if len(spotify_df) > 0:
+                top5_spotify = spotify_df.nlargest(min(5, len(spotify_df)), 'score_potentiel')
+                fig = px.bar(
+                    top5_spotify, 
+                    x='score_potentiel', 
+                    y='nom_artiste', 
+                    orientation='h', 
+                    text='score_potentiel',
+                    color_discrete_sequence=[COLORS['accent3']]
+                )
+                fig.update_traces(texttemplate='%{text:.1f}', textposition='outside')
+                fig.update_layout(
+                    plot_bgcolor=COLORS['bg_card'], 
+                    paper_bgcolor=COLORS['bg_card'], 
+                    font_color=COLORS['text'], 
+                    yaxis={'categoryorder':'total ascending'}, 
+                    height=400,
+                    showlegend=False
+                )
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.info("Aucun artiste Spotify avec ces filtres")
         else:
-            st.info("Aucun artiste Spotify avec ces filtres")
-    else:
-        st.info("Aucune donnée avec ces filtres")
+            st.info("Aucune donnée avec ces filtres")
 
 # ==================== TAB 2: TOP ARTISTES ====================
 with tab2:
