@@ -513,7 +513,7 @@ with tab4:
 
 # ==================== TAB 5: À PROPOS ====================
 with tab5:
-    st.markdown("## 🎤 À PROPOS DE JEK2 RECORDS")
+    st.markdown("##  À PROPOS DE JEK2 RECORDS")
     
     col1, col2 = st.columns([2, 1])
     
@@ -523,7 +523,7 @@ with tab5:
         <h3 style="color: {COLORS['primary']};">QUI SOMMES-NOUS ?</h3>
         <p style="font-size: 1.1rem; line-height: 1.8;">
         <strong>JEK2 Records</strong> est un label de musique urbaine français spécialisé dans 
-        la découverte de nouveaux talents dans le <strong>rap, hip-hop, RnB et soul</strong>.
+        la découverte de nouveaux talents dans le <strong>Rap et hip-hop</strong>.
         </p>
         <p style="font-size: 1.1rem; line-height: 1.8;">
         Notre mission : identifier les artistes prometteurs <strong>avant</strong> qu'ils ne deviennent célèbres.
@@ -538,7 +538,7 @@ with tab5:
         <p><strong>👥 Communauté :</strong><br>
         1 000 - 50 000 followers</p>
         <p><strong>🎵 Genres :</strong><br>
-        Rap, Hip-Hop, Trap, Drill, RnB, Soul</p>
+        Rap, Hip-Hop</p>
         <p><strong>📍 Localisation :</strong><br>
         France</p>
         <p><strong>📅 Activité :</strong><br>
@@ -726,7 +726,7 @@ with tab5:
     <p style="font-size: 1.1rem; line-height: 1.8;">
     Notre algorithme cherche le <strong>"sweet spot"</strong> : des artistes qui ont déjà prouvé 
     leur talent (communauté engagée, morceaux de qualité, régularité), mais qui sont encore 
-    <strong>sous le radar du grand public</strong>. C'est là qu'on peut les aider à exploser ! 🚀
+    <strong>sous le radar du grand public</strong>. C'est là qu'on peut les aider à exploser ! 
     </p>
     <p style="font-size: 1.05rem; line-height: 1.8;">
     ⚠️ <strong>Important :</strong> Un score élevé ne garantit pas le succès, mais il identifie 
