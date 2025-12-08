@@ -354,9 +354,9 @@ with tab1:
         fig.update_layout(plot_bgcolor=COLORS['bg_card'], paper_bgcolor=COLORS['bg_card'], font_color=COLORS['text'])
         st.plotly_chart(fig, use_container_width=True)
     
-    st.markdown("### 🏆 Top 10")
+    st.markdown("### 🏆 Top 5")
     if len(filtered_df) > 0:
-        top10 = filtered_df.nlargest(min(10, len(filtered_df)), 'score_potentiel')
+        top10 = filtered_df.nlargest(min(5, len(filtered_df)), 'score_potentiel')
         fig = px.bar(top10, x='score_potentiel', y='nom_artiste', orientation='h', color='plateforme', text='score_potentiel',
                     color_discrete_map={'Spotify': COLORS['accent3'], 'Deezer': COLORS['secondary']})
         fig.update_traces(texttemplate='%{text:.1f}', textposition='outside')
@@ -383,11 +383,27 @@ with tab2:
         
         # Tableau des données
         display_df = top_df[['nom_artiste', 'plateforme', 'followers_total', 'score_potentiel', 'url']].copy()
-        display_df.columns = ['Nom', 'Plateforme', 'Followers/Fans', 'Score', 'URL']
+        
+        # Ajouter colonne "Écouter" (même URL que profil)
+        display_df['Écouter'] = display_df['url']
+        
+        # Renommer les colonnes
+        display_df.columns = ['Nom', 'Plateforme', 'Followers/Fans', 'Score', 'Profil', '🎵 Écouter']
+        
+        # Formater
         display_df['Followers/Fans'] = display_df['Followers/Fans'].apply(lambda x: f"{int(x):,}")
         display_df['Score'] = display_df['Score'].round(1)
-        st.dataframe(display_df, use_container_width=True, hide_index=True, 
-                    column_config={"URL": st.column_config.LinkColumn("URL")})
+        
+        # Afficher avec 2 liens cliquables
+        st.dataframe(
+            display_df, 
+            use_container_width=True, 
+            hide_index=True,
+            column_config={
+                "Profil": st.column_config.LinkColumn("Profil", display_text="🔗 Voir"),
+                "🎵 Écouter": st.column_config.LinkColumn("Écouter", display_text="▶️ Play")
+            }
+        )
     else:
         st.info("Aucune donnée avec ces filtres")
 
