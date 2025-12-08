@@ -1,5 +1,6 @@
 # JEK2 Records - Music Talent Radar
 
+site: https://musictalentradar-ats9ctct3i3mxbhms7q6x3.streamlit.app/
 Application de détection d'artistes émergents de musiques urbaines en France utilisant l'analyse de données.
 
 ## Objectif
