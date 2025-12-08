@@ -46,7 +46,7 @@ COLORS = {
     'accent3': "#21B178",
     'bg_dark': "#070707",
     'bg_card': "#000000",
-    'text': "#7B5211"
+    'text': "#9E8153"
 }
 COLORS = {
     'primary': '#FF1B8D',
@@ -56,7 +56,7 @@ COLORS = {
     'accent3': "#21B178",
     'bg_dark': "#070707",
     'bg_card': "#000000",
-    'text': "#B8770D"
+    'text': "#B18E57"
 }
 
 st.markdown(f"""
