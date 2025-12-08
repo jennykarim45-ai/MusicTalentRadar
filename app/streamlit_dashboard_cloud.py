@@ -41,7 +41,7 @@ auth.logout_button()
 COLORS = {
     'primary': '#FF1B8D',
     'secondary': "#323A79",
-    'accent1': "#F00606",
+    'accent1': "#336AAE",
     'accent2': "#4A0B7E",
     'accent3': "#21B178",
     'bg_dark': "#070707",
@@ -51,7 +51,7 @@ COLORS = {
 COLORS = {
     'primary': '#FF1B8D',
     'secondary': "#323A79",
-    'accent1': "#F00606",
+    'accent1': "#495AB0",
     'accent2': "#4A0B7E",
     'accent3': "#21B178",
     'bg_dark': "#070707",
