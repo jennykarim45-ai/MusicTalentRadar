@@ -811,7 +811,7 @@ with tab5:
     <div class="info-box">
     <h3 style="color: {COLORS['accent3']};">💡 EN RÉSUMÉ</h3>
     <p style="font-size: 1.1rem; line-height: 1.8;">
-    Notre algorithme cherche le <strong>"sweet spot"</strong> : des artistes qui ont déjà prouvé 
+    Notre algorithme cherche des artistes qui ont déjà prouvé 
     leur talent (communauté engagée, morceaux de qualité, régularité), mais qui sont encore 
     <strong>sous le radar du grand public</strong>. C'est là qu'on peut les aider à exploser ! 
     </p>
