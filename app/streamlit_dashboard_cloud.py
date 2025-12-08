@@ -339,10 +339,20 @@ with tab1:
     with col1:
         st.markdown("### 📊 Distribution des scores")
         if len(filtered_df) > 0:
-            fig = px.histogram(filtered_df, x='score_potentiel',y='nombre_artistes', nbins=20, color='plateforme',
-                              color_discrete_map={'Spotify': COLORS['accent3'], 'Deezer': COLORS['secondary']})
-            fig.update_layout(plot_bgcolor=COLORS['bg_card'], paper_bgcolor=COLORS['bg_card'], font_color=COLORS['text'])
-            st.plotly_chart(fig, use_container_width=True)
+            fig = px.histogram(
+                filtered_df, 
+                x='score_potentiel', 
+                nbins=20, 
+                color='plateforme',
+                color_discrete_map={'Spotify': COLORS['accent3'], 'Deezer': COLORS['secondary']},
+                labels={'count': "Nombre d'artistes", 'score_potentiel': 'Score de Potentiel'}
+            )
+            fig.update_layout(
+                plot_bgcolor=COLORS['bg_card'], 
+                paper_bgcolor=COLORS['bg_card'], 
+                font_color=COLORS['text'],
+                yaxis_title="Nombre d'artistes"
+            )
         else:
             st.info("Aucune donnée avec ces filtres")
     
