@@ -336,25 +336,30 @@ with tab1:
     st.markdown("---")
     col1, col2 = st.columns(2)
     
-    with col1:
-        st.markdown("### 📊 Distribution des scores")
-        if len(filtered_df) > 0:
-            fig = px.histogram(
-                filtered_df, 
-                x='score_potentiel', 
-                nbins=20, 
-                color='plateforme',
-                color_discrete_map={'Spotify': COLORS['accent3'], 'Deezer': COLORS['secondary']},
-                labels={'count': "Nombre d'artistes", 'score_potentiel': 'Score de Potentiel'}
-            )
-            fig.update_layout(
-                plot_bgcolor=COLORS['bg_card'], 
-                paper_bgcolor=COLORS['bg_card'], 
-                font_color=COLORS['text'],
-                yaxis_title="Nombre d'artistes"
-            )
-        else:
-            st.info("Aucune donnée avec ces filtres")
+with col1:
+    st.markdown("### 📊 Distribution des scores")
+    if len(filtered_df) > 0:
+        fig = px.histogram(
+            filtered_df, 
+            x='score_potentiel', 
+            nbins=20, 
+            color='plateforme',
+            color_discrete_map={'Spotify': COLORS['accent3'], 'Deezer': COLORS['secondary']},
+            labels={
+                'count': "Nombre d'artistes",      # ← Change "count" en "Nombre d'artistes"
+                'score_potentiel': 'Score'          # ← Change le nom de l'axe X
+            }
+        )
+        fig.update_layout(
+            plot_bgcolor=COLORS['bg_card'], 
+            paper_bgcolor=COLORS['bg_card'], 
+            font_color=COLORS['text'],
+            yaxis_title="Nombre d'artistes",        # ← Titre de l'axe Y
+            xaxis_title="Score de Potentiel"        # ← Titre de l'axe X
+        )
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.info("Aucune donnée avec ces filtres")
     
     with col2:
         st.markdown("### 👥 Répartition")
