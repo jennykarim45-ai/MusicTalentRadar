@@ -388,7 +388,7 @@ with tab2:
         display_df['Écouter'] = display_df['url']
         
         # Renommer les colonnes
-        display_df.columns = ['Nom', 'Plateforme', 'Followers/Fans', 'Score', '🎵 Écouter']
+        display_df.columns = ['Nom', 'Plateforme', 'Followers/Fans', 'Score', 'url', '🎵 Écouter']
         
         # Formater
         display_df['Followers/Fans'] = display_df['Followers/Fans'].apply(lambda x: f"{int(x):,}")
