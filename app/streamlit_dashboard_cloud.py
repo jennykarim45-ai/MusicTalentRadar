@@ -7,6 +7,8 @@ import sys
 import os
 from PIL import Image
 
+import auth  # ← AJOUT AUTHENTIFICATION
+
 # Détection de l'environnement
 try:
     import psycopg2
@@ -20,20 +22,41 @@ except:
 
 st.set_page_config(
     page_title="JEK2 Records - Talent Radar",
-    page_icon="🎤",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
+# ============= AUTHENTIFICATION =============
+if not auth.require_authentication():
+    if st.session_state.get('show_login', False):
+        auth.login_form()
+    else:
+        auth.public_page_about()
+    st.stop()
+
+auth.logout_button()
+# ============================================
+
 COLORS = {
     'primary': '#FF1B8D',
     'secondary': "#323A79",
-    'accent1': "#0F75A5",
+    'accent1': "#F00606",
     'accent2': "#4A0B7E",
     'accent3': "#21B178",
     'bg_dark': "#070707",
     'bg_card': "#000000",
-    'text': "#7F5107"
+    'text': "#E88F00"
+}
+COLORS = {
+    'primary': '#FF1B8D',
+    'secondary': "#323A79",
+    'accent1': "#F00606",
+    'accent2': "#4A0B7E",
+    'accent3': "#21B178",
+    'bg_dark': "#070707",
+    'bg_card': "#000000",
+    'text': "#E88F00"
 }
 
 st.markdown(f"""
@@ -261,7 +284,7 @@ with col2:
 
 # ==================== SIDEBAR ====================
 with st.sidebar:
-    st.markdown("## 🎛️ FILTRES")
+    st.markdown("## **🎛️ FILTRES**")
     
     # Liste des plateformes (gestion sécurisée)
     plateformes_disponibles = latest_metrics_df['plateforme'].unique().tolist() if 'plateforme' in latest_metrics_df.columns else []
@@ -291,11 +314,11 @@ st.sidebar.write(f"**{len(filtered_df)} artistes** après filtrage")
 
 # ==================== TABS ====================
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "📊 VUE D'ENSEMBLE", 
-    "🌟 TOP ARTISTES", 
-    "📈 ÉVOLUTION", 
-    "🔔 ALERTES",
-    "ℹ️ À PROPOS"
+    "**📊 VUE D'ENSEMBLE**", 
+    "**🌟 TOP ARTISTES**", 
+    "**📈 ÉVOLUTION**", 
+    "**🔔 ALERTES**",
+    "**ℹ️ À PROPOS**"
 ])
 
 # ==================== TAB 1: VUE D'ENSEMBLE ====================
@@ -513,7 +536,7 @@ with tab5:
         <div class="info-box">
         <h4 style="color: {COLORS['accent3']};">NOS CRITÈRES</h4>
         <p><strong>👥 Communauté :</strong><br>
-        1 000 - 100 000 followers</p>
+        1 000 - 50 000 followers</p>
         <p><strong>🎵 Genres :</strong><br>
         Rap, Hip-Hop, Trap, Drill, RnB, Soul</p>
         <p><strong>📍 Localisation :</strong><br>
