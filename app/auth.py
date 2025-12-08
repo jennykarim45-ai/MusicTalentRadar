@@ -51,7 +51,7 @@ def login_form():
     
     with col2:
         st.markdown('<div class="login-container">', unsafe_allow_html=True)
-        st.markdown(f'<h1 style="text-align: center; color: {COLORS["primary"]};">🎤 JEK2 RECORDS</h1>', unsafe_allow_html=True)
+        st.markdown(f'<h1 style="text-align: center; color:{COLORS["secondary"]}, {COLORS["primary"]};"> JEK2 RECORDS</h1>', unsafe_allow_html=True)
         st.markdown("### 🔐 CONNEXION")
         
         with st.form("login_form", clear_on_submit=False):
