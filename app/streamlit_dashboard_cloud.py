@@ -41,17 +41,17 @@ auth.logout_button()
 COLORS = {
     'primary': '#FF1B8D',
     'secondary': "#323A79",
-    'accent1': "#336AAE",
+    'accent1': "#3D689D",
     'accent2': "#4A0B7E",
     'accent3': "#21B178",
     'bg_dark': "#070707",
     'bg_card': "#000000",
-    'text': "#B57714"
+    'text': "#7B5211"
 }
 COLORS = {
     'primary': '#FF1B8D',
     'secondary': "#323A79",
-    'accent1': "#495AB0",
+    'accent1': "#47559D",
     'accent2': "#4A0B7E",
     'accent3': "#21B178",
     'bg_dark': "#070707",
