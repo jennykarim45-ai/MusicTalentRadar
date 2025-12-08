@@ -368,10 +368,10 @@ with tab1:
 
 # ==================== TAB 2: TOP ARTISTES ====================
 with tab2:
-    st.markdown("### 🌟 Top 20 Artistes")
+    st.markdown("### 🌟 Top 50 Artistes")
     
     if len(filtered_df) > 0:
-        top_df = filtered_df.nlargest(min(20, len(filtered_df)), 'score_potentiel')
+        top_df = filtered_df.nlargest(min(50, len(filtered_df)), 'score_potentiel')
         
         fig = px.bar(top_df.sort_values('score_potentiel'), y='nom_artiste', x='score_potentiel', color='plateforme', 
                     orientation='h', text='score_potentiel',
