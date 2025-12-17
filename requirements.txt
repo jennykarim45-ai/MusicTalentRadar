@@ -7,3 +7,5 @@ beautifulsoup4>=4.12.2
 Pillow>=10.1.0
 psycopg2-binary>=2.9.10
 schedule>=1.2.0
+numpy>=1.24.0
+python-dotenv>=1.0.0

@@ -17,7 +17,7 @@ except ImportError:
 MIN_FOLLOWERS = 1000
 MAX_FOLLOWERS = 50000
 MIN_POPULARITY = 10
-MAX_POPULARITY = 45
+MAX_POPULARITY = 60
 MIN_RECENT_RELEASE_MONTHS = 24
 
 # Mots à exclure
@@ -174,7 +174,7 @@ def get_artist_details(artist_id):
 
 def calculate_potential_score(artist):
     """Calcule un score de potentiel avec des critères affinés"""
-    if 30 <= artist['popularite'] <= 50:
+    if 30 <= artist['popularite'] <= 60:
         popularity_score = 30
     elif 20 <= artist['popularite'] < 30:
         popularity_score = 25
@@ -285,7 +285,7 @@ column_order = [
 ]
 df = df[column_order]
 
-filename = f'data/spotify_emerging_artists_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
+filename = f'../data/spotify_emerging_artists_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
 df.to_csv(filename, index=False, encoding='utf-8-sig')
 
 print(f"\nDonnées exportées dans: {filename}")

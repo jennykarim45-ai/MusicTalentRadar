@@ -6,9 +6,41 @@ import glob
 from datetime import datetime
 import hashlib
 
+# Charger les variables d'environnement depuis .env
+try:
+    from dotenv import load_dotenv
+    # Charger depuis le dossier parent (racine du projet)
+    env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+    load_dotenv(env_path)
+    print(f"✅ Chargement .env depuis : {env_path}")
+except ImportError:
+    print("⚠️ python-dotenv non installé")
+
 def get_database_url():
     """Récupère l'URL de la base de données"""
-    return os.getenv("DATABASE_URL", "")
+    db_url = os.getenv("DATABASE_URL", "")
+    if db_url:
+        print("✅ DATABASE_URL trouvée dans .env")
+        return db_url
+    
+    # Essayer secrets Streamlit en fallback
+    try:
+        import streamlit as st
+        db_url = st.secrets["DATABASE_URL"]
+        print("✅ DATABASE_URL trouvée dans secrets.toml")
+        return db_url
+    except:
+        pass
+    
+    print("\n❌ DATABASE_URL non trouvée !")
+    print("\n📋 SOLUTIONS :")
+    print("\n1️⃣ Vérifier .env dans le dossier racine")
+    print("   cd ~/path/to/MusicTalentRadar")
+    print('   echo "DATABASE_URL=postgresql://..." > .env')
+    print("\n2️⃣ Ou vérifier .streamlit/secrets.toml")
+    print("   DATABASE_URL = \"postgresql://...\"")
+    
+    raise Exception("DATABASE_URL non configurée")
 
 def get_connection():
     """Crée une connexion à la base PostgreSQL"""

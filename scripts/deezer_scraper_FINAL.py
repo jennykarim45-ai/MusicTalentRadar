@@ -12,7 +12,7 @@ import os
 
 # Configuration
 MIN_FANS = 1000
-MAX_FANS = 100000
+MAX_FANS = 20000
 
 # ARTISTES SEED (connus, on part d'eux pour trouver les autres)
 SEED_ARTISTS = [
@@ -158,21 +158,22 @@ def calculate_score(artist):
     engagement = artist['engagement_rate']
     albums = artist['total_albums']
     
-    # 1. SCORE FANS (30 points max) - Courbe réaliste
+    # 1. SCORE FANS (30 points max) - Zone optimale à 20K
     if fans < 1000:
         fans_score = 0
     elif 1000 <= fans < 5000:
         # Croissance progressive 0-15 pts
         fans_score = (fans - 1000) / 4000 * 15
-    elif 5000 <= fans < 15000:
+    elif 5000 <= fans < 12000:
         # Zone intéressante 15-25 pts
-        fans_score = 15 + ((fans - 5000) / 10000 * 10)
-    elif 15000 <= fans <= 30000:
+        fans_score = 15 + ((fans - 5000) / 7000 * 10)
+    elif 12000 <= fans <= 20000:
         # Zone optimale 25-30 pts
-        fans_score = 25 + ((fans - 15000) / 15000 * 5)
+        fans_score = 25 + ((fans - 12000) / 8000 * 5)
     else:
-        # Décroissance après 30K (déjà connus)
-        fans_score = max(20, 30 - ((fans - 30000) / 20000 * 10))
+        # Décroissance progressive après 20K
+        excedent = fans - 20000
+        fans_score = max(20, 30 - (excedent / 10000 * 10))
     
     # 2. ENGAGEMENT (30 points max) - Plus strict
     # Engagement parfait = 30 pts, mais rare d'avoir 100%
@@ -207,26 +208,30 @@ def calculate_score(artist):
         # Trop d'albums
         albums_score = max(5, 10 - ((albums - 30) / 20 * 5))
     
-    # 4. RATIO FANS/ALBUMS (15 points max) - Efficacité
+    # 4. RATIO FANS/ALBUMS (15 points max) - Efficacité optimisée pour 20K fans
     if albums > 0:
         ratio = fans / albums
-        if 2000 <= ratio <= 8000:
-            # Ratio optimal
+        if 1000 <= ratio <= 5000:
+            # Ratio optimal (1K-5K fans par album)
             ratio_score = 15
-        elif 1000 <= ratio < 2000:
-            ratio_score = 10 + ((ratio - 1000) / 1000 * 5)
-        elif 8000 < ratio <= 15000:
-            ratio_score = 15 - ((ratio - 8000) / 7000 * 5)
-        elif ratio < 1000:
-            ratio_score = (ratio / 1000) * 10
+        elif 500 <= ratio < 1000:
+            # Croissance progressive
+            ratio_score = 10 + ((ratio - 500) / 500 * 5)
+        elif 5000 < ratio <= 10000:
+            # Légère décroissance
+            ratio_score = 15 - ((ratio - 5000) / 5000 * 5)
+        elif ratio < 500:
+            # Très faible ratio
+            ratio_score = (ratio / 500) * 10
         else:
-            ratio_score = max(5, 10 - ((ratio - 15000) / 10000 * 5))
+            # Ratio trop élevé
+            ratio_score = max(5, 10 - ((ratio - 10000) / 5000 * 5))
     else:
         ratio_score = 0
-    
+
     # TOTAL (sans bonus ni malus)
     total = fans_score + engagement_score + albums_score + ratio_score
-    
+
     return round(min(total, 100), 2)
 
 def main():

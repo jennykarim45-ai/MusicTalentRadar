@@ -173,7 +173,7 @@ def public_page_about():
                    -webkit-text-fill-color: transparent;
                    font-size: 3rem;
                    margin-bottom: 2rem;">
-            JEK2 RECORDS - TALENT RADAR
+            JEK2 RECORDS - MUSIC TALENT RADAR
         </h1>
     """, unsafe_allow_html=True)
     
@@ -185,9 +185,9 @@ def public_page_about():
         st.markdown("""
         ###  **Notre Mission**
         
-        Découvrir les **talents émergents** du rap français avant tout le monde.
+        Découvrir les **talents émergents** du Rap et Hip Hop français avant tout le monde.
         
-        Nous utilisons la **data science** et l'**IA** pour :
+        Nous utilisons **l'analyse de données** pour :
         - 🔍 Identifier les artistes prometteurs
         - 📊 Analyser leur potentiel de croissance
         
@@ -202,7 +202,7 @@ def public_page_about():
         - 🎧 Deezer
         
         
-        **Analyse prédictive** basée sur :
+        **Analyse** basée sur :
         - Nombre de fans/followers
         - Taux d'engagement
         - Vitesse de croissance

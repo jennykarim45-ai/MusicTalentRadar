@@ -23,9 +23,8 @@ jobs:
     
     - name: Install dependencies
       run: |
-        pip install --upgrade pip
-        pip install spotipy requests psycopg2-binary python-dotenv
-    
+        pip install -r requirements.txt
+        
     - name: Run Spotify scraper
       env:
         SPOTIPY_CLIENT_ID: ${{ secrets.SPOTIPY_CLIENT_ID }}
