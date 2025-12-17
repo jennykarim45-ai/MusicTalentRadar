@@ -278,9 +278,7 @@ def public_page_about():
             </tbody>
         </table>
         
-        <p style="color: {COLORS['accent3']}; font-weight: bold; margin-top: 1rem;">
-            ⭐ <strong>Score optimal</strong> : 75-90 points
-        </p>
+        
     """, unsafe_allow_html=True)
     
     st.markdown("---")
